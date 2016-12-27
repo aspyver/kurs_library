@@ -1,0 +1,80 @@
+body {
+	background-color: #7F6854;
+}	
+h1 {
+	color: #2E261E
+}
+h3 {
+	color: #7F6854
+}
+a{
+	color: 2E261E;
+}
+
+#header{
+	width:100%;
+	background-color: #7F6854;
+	clear:both;
+} 
+.headerel {
+	height: 70px;
+	width:100px;
+	float:left;
+}
+
+#menu{
+	width:100%;
+	background-color: #7F6854;
+	font-size: 120%;
+	border-bottom: 2px solid #2E261E;
+	border-top: 2px solid #2E261E;
+	clear:both;
+}
+
+.pmenu {
+	width: 150px;
+	float: left;
+	text-align: left;
+	padding: 0.5em 0.5em 0.5em 0.5em;
+}
+
+.clear {
+	clear:both;
+}
+
+
+#news{
+	float: left;
+	padding: 1em 1em 1em 1em;
+	background-color: #DBCDAD;
+	width:250px;
+	vertical-align: top; 
+	color: #2E261E;
+	margin: 5px;
+}
+.container{
+	position: relative;
+	background-color: #7F6854;
+	overflow: hidden;
+}
+#content{
+	margin:5px 5px 5px 300px;
+	padding: 1em 1em 1em 1em;
+	background-color: #FFF5CF;
+	vertical-align: top; 
+	color: #2E261E;
+}
+
+#footer {
+	width:100%;
+	border-top: 1px solid #2E261E;
+	margin-top: 15;
+	background-color: #7F6854;
+	color: #3D3228;
+	padding: 1em 2em 1em 1em;
+	font-size: 80%;
+	text-align: center;
+	clear:both;
+}
+
+

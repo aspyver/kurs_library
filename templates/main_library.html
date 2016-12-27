@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} {{ block.super }} {% endblock %}
+
+{% block content %}
+  <h1>Выберете интересующую категорию: </h1>
+  {% for e in form.non_field_errors %}
+    <div class="alert">{{ e }}</div>
+  {% endfor %}
+  
+  <div class="areas_list">
+    <form method="post" action="/cathegory/">
+      {% csrf_token %}
+        {% for field in form %}
+          <div class="form-group{% if field.errors %} alert{% endif %}">
+            <div class="form-label">
+              {{ field.label }}
+            </div>
+            <div class="form-field">
+              {{ field }}
+            </div>
+            {{ field.errors }}
+          </div>
+        {% endfor %}
+      <button type="submit" class="btn">Ask this!</button>
+    </form>
+  </div>
+{% endblock %}
+
+ 
