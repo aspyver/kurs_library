@@ -3,20 +3,17 @@
 {% block title %} {{ block.super }} {% endblock %}
 
 {% block page %}
-	<div class=container>
-		<div id="menu">
-			<h3>Меню:</h3>
-			{% block menu %}
-				<ul>
-					<li><a href="/">В начало</a></li>
-				</ul>
-			{% endblock %}
-		</div>
+	<div id="menu">
+		{% block menu %}
+			<ul>
+				<li><a href="/library/">В начало</a></li>
+			</ul>
+		{% endblock %}
+	</div>
 
-		<div id="content">
-			{% block content %}
-			
-			{% endblock %}
-		</div>
-	</div>	
+	<div id="content">
+		{% block content %}
+		
+		{% endblock %}
+	</div>
 {% endblock %}

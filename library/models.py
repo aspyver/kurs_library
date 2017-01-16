@@ -26,10 +26,11 @@ class Book (models.Model):
     pages_count = models.IntegerField(blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
     areas = models.ManyToManyField(AreaOfExpertise, db_table="library_mm_bookhasarea", related_name="books")
-
+    book_count = models.IntegerField(blank=True, null=True)
+    
     def __str__(self):
         #return force_bytes('%s %s ' % (self.book_name, self.isbn)) + ', '.join([str(author.author_name)] for author in self.authors.all())
-        return force_bytes('%s -- %s -- %s' % (self.book_name, self.isbn, self.publisher)) 
+        return "%s -- %s -- %s" % (self.book_name, self.isbn, self.publisher)
      
     def in_stock(self):
         self.objects.raw('''SELECT COUNT(*) FROM library_book AS book INNER JOIN library_bookcopy AS bc1
@@ -43,7 +44,8 @@ class Book (models.Model):
                             WHERE bc2.id = bc3.id
                             )) AND (rbc.return_date IS NULL) AND (bc1.id = bc2.id)))
                             GROUP BY bc1.id''')
-
+	#def get_absolute_url(self):
+		#return reverse('book', kwargs={'pk': self.pk})
 """
 validators=[validate_isbn]
 
@@ -61,7 +63,7 @@ class BookCopy (models.Model):
     rack_number = models.IntegerField()
 
     def __str__(self):
-        return force_bytes('%s on shelf %s, on rack %s' % (self.book_info.book_name.get(), str[self.shelf_number], str[self.rack_number]))
+        return "%s on shelf %s, on rack %s" % (self.book_info.book_name.get(), str[self.shelf_number], str[self.rack_number])
 
 
 class ReaderBookCard (models.Model):
@@ -72,7 +74,7 @@ class ReaderBookCard (models.Model):
     employee_take = models.ForeignKey(User, related_name="books_taken", blank=True, null=True, default=models.SET_NULL, on_delete=models.SET_NULL) #как-то прописать сотрудника
 
     def __str__(self):
-        return force_bytes('№ %d (%s), given on %s by %s. Returned on %s to %s' % (self.number.pk, str(self.taken_date), str(self.employee_give.username), str(self.return_date), str(self.employee_take.username)))
+        return "№ %d (%s), given on %s by %s. Returned on %s to %s" % (self.number.pk, str(self.taken_date), str(self.employee_give.username), str(self.return_date), str(self.employee_take.username))
 
 class Reader (models.Model):
     surname = models.CharField(max_length=64)
@@ -82,4 +84,4 @@ class Reader (models.Model):
     phone = models.CharField(max_length=32, default="-")
 
     def __str__(self):
-        return force_bytes('%s %s, %s, %s' % (self.surname, self.name, self.address, self.phone))
+        return "%s %s, %s, %s" % (self.surname, self.name, self.address, self.phone)

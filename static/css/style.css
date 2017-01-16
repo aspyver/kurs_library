@@ -2,13 +2,13 @@ body {
 	background-color: #7F6854;
 }	
 h1 {
-	color: #2E261E
+	color: #2E261E;
 }
 h3 {
-	color: #7F6854
+	color: #7F6854;
 }
 a{
-	color: 2E261E;
+	color: #2E261E;
 }
 
 #header{
@@ -22,14 +22,6 @@ a{
 	float:left;
 }
 
-#menu{
-	width:100%;
-	background-color: #7F6854;
-	font-size: 120%;
-	border-bottom: 2px solid #2E261E;
-	border-top: 2px solid #2E261E;
-	clear:both;
-}
 
 .pmenu {
 	width: 150px;
@@ -43,7 +35,7 @@ a{
 }
 
 
-#news{
+#menu{
 	float: left;
 	padding: 1em 1em 1em 1em;
 	background-color: #DBCDAD;
@@ -51,6 +43,7 @@ a{
 	vertical-align: top; 
 	color: #2E261E;
 	margin: 5px;
+	min-height:800px;
 }
 .container{
 	position: relative;
@@ -63,6 +56,7 @@ a{
 	background-color: #FFF5CF;
 	vertical-align: top; 
 	color: #2E261E;
+	min-height:800px;
 }
 
 #footer {

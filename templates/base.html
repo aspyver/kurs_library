@@ -1,15 +1,16 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
 	<title>{% block title %}Library{% endblock %}</title>
-	<link rel = "stylesheet" href = "mystyle.css">
+	<link rel = "stylesheet" href = "{% static 'css/style.css' %}">
 </head>
 
 
 <body>
 	<div id="header">
-		<div class=headerel><img src="images/icon.png" width = "65px" alt = "Иконка" ></div>
+		<div class=headerel><img src="{% static 'images/icon.png' %}" width = "65px" alt = "Иконка" ></div>
 		<div class=headerel>
 			<h1><b>Библиотека</b></h1>
 		</div>
@@ -20,6 +21,7 @@
 	
 	<div class=container>
 		{% block page %}	
+		{% endblock %}
 	</div>
 	
 	
