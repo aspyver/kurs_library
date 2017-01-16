@@ -1,0 +1,80 @@
+{% extends "base_2col.html" %}
+
+{% block menu %}
+	<h3>В начало</h3>
+	<h3>Категории</h3>
+	<ul>
+		
+		{% for area in areas %}
+		<li><a href="/category/{{ area.pk }}/">{{ area.area_name }}</a></li>
+		{% endfor %}
+		
+	</ul>
+
+{% endblock %}
+
+
+{% block content %}
+	<h3>Книги категории {{ area.area_name }}:</h3>
+	<table>
+		<tr>
+			<th>Название</th>
+			<th>Авторы</th>
+			<th>Издательство</th>
+			<th>Области знания</th>
+			<th>Уникальный номер</th>
+			<th>Наличие</th>
+		</tr>
+		{% for book in books %}
+			<tr>
+				<td><a href="/books/{{ book.pk }}/">{{ book.book_name }}</a></td>
+				<td>
+					{% for author in authors %}
+						<a href="/authors/author/{{ author.pk }}/">{{ author.author_name }}, </a>
+					{% endfor %}
+				</td>
+				<td>{{ book.publisher }}</td>
+				<td>
+					{% for area in areas %}
+						<a href="/category/{{ area.pk }}/">{{ area.area_name }}, </a>
+					{% endfor %}
+				</td>
+				<td>{{ book.pk }}</td>
+				<td>{% if book.in_stock %}Есть в наличии{% else %}Нет в наличии{% endif%}</td>
+			</tr>
+	</table>
+
+
+
+{% endblock %}
+
+
+
+{% comment %}
+
+{% block content %}
+  <h1>Выберете интересующую категорию: </h1>
+  {% for e in form.non_field_errors %}
+    <div class="alert">{{ e }}</div>
+  {% endfor %}
+  
+  <div class="areas_list">
+    <form method="post" action="/cathegory/">
+      {% csrf_token %}
+        {% for field in form %}
+          <div class="form-group{% if field.errors %} alert{% endif %}">
+            <div class="form-label">
+              {{ field.label }}
+            </div>
+            <div class="form-field">
+              {{ field }}
+            </div>
+            {{ field.errors }}
+          </div>
+        {% endfor %}
+      <button type="submit" class="btn">Ask this!</button>
+    </form>
+  </div>
+{% endblock %}
+
+{% endcomment %}
