@@ -27,7 +27,7 @@
 					{% endfor %}
 				</td>
 				<td>{{ book.pk }}</td>
-				<td>{% if book.in_stock %}Есть в наличии{% else %}Нет в наличии{% endif%}</td>
+				<td>{% if book.book_in_stock_count %}Есть в наличии{% else %}Нет в наличии{% endif%}</td>
 			</tr>
 		{% endfor %}
 	</table>
