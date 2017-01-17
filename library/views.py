@@ -40,11 +40,30 @@ def area_of_expertise(request, area_id):
 	return HttpResponse(s)
 	'''
 	return render(request, 'books.html', {
-		'area': area_id,
+		'areas': AreaOfExpertise.objects.all().order_by("area_name"),
+		'area': ar,
 		'books': books,
 	})
 
+def book(request, book_id):
+	if book_id == None:
+		book = Book.objects.first()
+	else:
+		try:
+			book = Book.objects.get(pk=book_id)
+		except Book.DoesNotExist:
+			raise Http404
+	#authors = Book.objects.filter(books=book_id)[:4]
+	return render(request, 'book.html', {
+	    'areas': AreaOfExpertise.objects.all().order_by("area_name"),
+	    'book': book,
+	    'authors': book.authors.all()[:4],
+	    'book_areas': book.areas.all(),
+	})
 
+	
+	
+	
 def update_book_in_stock(book):
 	book_id = book.id
 	cursor = connection.cursor()

@@ -1,12 +1,12 @@
 {% extends "base_2col.html" %}
 
 {% block menu %}
-	<h3><a href="/library/">В начало</a></h3>
-	<h3>Категории</h3>
+	<h3><a class=text href="/library/">В начало</a></h3>
+	<h3>Категории:</h3>
 	<ul>
 		
 		{% for area in areas %}
-		<li><a href="/library/category/{{ area.pk }}/">{{ area.area_name }}</a></li>
+		<li><a class=text href="/library/category/{{ area.pk }}/">{{ area.area_name }}</a></li>
 		{% endfor %}
 		
 	</ul>

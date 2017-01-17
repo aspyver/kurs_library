@@ -1,0 +1,76 @@
+{% extends "categories.html" %}
+
+{% block menu %} {{ block.super }} {% endblock %}
+
+
+{% block content %}
+	<h3>Информация о книге {{ book.book_name }}:</h3>
+	<table>
+		<tr>
+			<th><i>Уникальный номер*</i></th>
+			<td>{{ book.pk }}</td>
+		</tr>
+		<tr>
+			<th>Название</th>
+			<td>"{{ book.book_name }}"</td>
+		</tr>
+		<tr>
+			<th>Авторы</th>
+			<td>
+				{% for author in authors %}
+					<a href="/authors/{{ author.pk }}/">{{ author.author_name }}, </a>
+				{% endfor %}
+			</td>
+		</tr>
+		<tr>
+			<th>Город</th>
+			<td>{{ book.book_city }}</td>
+		</tr>
+		<tr>
+			<th>Издательство</th>
+			<td>{{ book.publisher }}</td>
+		</tr>
+		<tr>
+			<th>Количество страниц</th>
+			<td>{{ book.pages_count }}</td>
+		</tr>
+		<tr>
+			<th>Области знаний</th>
+			<td>
+				{% for area in book_areas %}
+					<a href="/library/category/{{ area.pk }}/">{{ area.area_name }}, </a>
+				{% endfor %}
+			</td>
+		</tr>
+		<tr>
+			<th>В наличии в библиотеке</th>
+			<td>{% if book.book_in_stock_count %}{{book.book_in_stock_count}}{% else %}Нет в наличии{% endif%}</td>
+		</tr>
+		<tr>
+			<th>ISBN</th>
+			<td>{{ book.isbn }}</td>
+		</tr>
+		
+	</table>
+
+
+<p>* Для получения книги назовите этот номер библиотекарю</p>
+{% endblock %}
+
+
+
+{% comment %}
+
+
+
+<td>
+	{% for author in book.authors %}
+		<a href="/authors/author/{{ author.pk }}/">{{ author.author_name }}, </a>
+	{% endfor %}
+</td>
+<td>
+	{% for area in areas %}
+		<a href="/category/{{ area.pk }}/">{{ area.area_name }}, </a>
+	{% endfor %}
+</td>
+{% endcomment %}

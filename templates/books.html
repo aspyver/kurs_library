@@ -1,38 +1,29 @@
 {% extends "categories.html" %}
 
+{% block menu %} {{ block.super }} {% endblock %}
+
 
 {% block content %}
 	<h3>Книги категории {{ area.area_name }}:</h3>
 	<table>
 		<tr>
 			<th>Название</th>
-			<th>Авторы</th>
 			<th>Издательство</th>
-			<th>Области знания</th>
-			<th>Уникальный номер</th>
+			<th>Уникальный номер*</th>
 			<th>Наличие</th>
 		</tr>
 		{% for book in books %}
 			<tr>
-				<td><a href="/books/{{ book.pk }}/">{{ book.book_name }}</a></td>
-				<td>
-					{% for author in authors %}
-						<a href="/authors/author/{{ author.pk }}/">{{ author.author_name }}, </a>
-					{% endfor %}
-				</td>
+				<td><a href="/library/books/{{ book.pk }}/">{{ book.book_name }}</a></td>
 				<td>{{ book.publisher }}</td>
-				<td>
-					{% for area in areas %}
-						<a href="/category/{{ area.pk }}/">{{ area.area_name }}, </a>
-					{% endfor %}
-				</td>
+
 				<td>{{ book.pk }}</td>
 				<td>{% if book.book_in_stock_count %}Есть в наличии{% else %}Нет в наличии{% endif%}</td>
 			</tr>
 		{% endfor %}
 	</table>
 
-
+<p>* Для получения книги назовите этот номер библиотекарю</p>
 
 {% endblock %}
 
@@ -65,4 +56,14 @@
   </div>
 {% endblock %}
 
+<td>
+	{% for author in book.authors %}
+		<a href="/authors/author/{{ author.pk }}/">{{ author.author_name }}, </a>
+	{% endfor %}
+</td>
+<td>
+	{% for area in areas %}
+		<a href="/category/{{ area.pk }}/">{{ area.area_name }}, </a>
+	{% endfor %}
+</td>
 {% endcomment %}
