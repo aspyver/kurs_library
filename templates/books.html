@@ -23,7 +23,7 @@
 		{% endfor %}
 	</table>
 
-<p>* Для получения книги назовите этот номер сотруднику библиотеки.</p>
+<p>* Для получения книги назовите этот номер библиотекарю</p>
 
 {% endblock %}
 
@@ -56,4 +56,14 @@
   </div>
 {% endblock %}
 
+<td>
+	{% for author in book.authors %}
+		<a href="/authors/author/{{ author.pk }}/">{{ author.author_name }}, </a>
+	{% endfor %}
+</td>
+<td>
+	{% for area in areas %}
+		<a href="/category/{{ area.pk }}/">{{ area.area_name }}, </a>
+	{% endfor %}
+</td>
 {% endcomment %}

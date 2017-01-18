@@ -11,4 +11,6 @@ urlpatterns = [
     url(r'^books/((?P<book_id>\d+)/)?$', views.book, name = "book"),
     #url(r'^search-cat/$', views.search_area_form, name = "search_category"),
     url(r'^search/$', views.search, name="search"),
+    url(r'^login/$', user_login, name='login'),
+    #url(r'^logout/.*$', user_logout, name='new'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
