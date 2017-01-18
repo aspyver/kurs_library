@@ -119,9 +119,12 @@ def user_login(request):
             user = form.save()
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/library/')
     form = LoginForm()
-    return render(request, 'login.html', {'form': form})		
+    return render(request, 'login.html', {
+        'form': form,
+        'areas': AreaOfExpertise.objects.all().order_by("area_name"),
+    })		
 	
 '''
 class AreaSearchForm(ListView):
