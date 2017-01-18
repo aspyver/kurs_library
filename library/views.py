@@ -118,7 +118,7 @@ def user_login(request):
                 login(request, user)
                 return HttpResponseRedirect('/')
     form = LoginForm()
-	return render(request, 'login.html', {'form': form})		
+    return render(request, 'login.html', {'form': form})		
 	
 '''
 class AreaSearchForm(ListView):
