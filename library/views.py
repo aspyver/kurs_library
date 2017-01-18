@@ -1,7 +1,10 @@
-from django.shortcuts import render, render_to_response
-from django.http import HttpResponse, Http404
+from django.shortcuts import render, render_to_response, redirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from library.models import AreaOfExpertise, Book
 from django.db import connection
+from library.forms import LoginForm
+from django.contrib.auth import login, logout
+
 '''
 from django.views.generic import ListView
 from django.db.models import Q
