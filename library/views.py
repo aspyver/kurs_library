@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, Http404
 from library.models import AreaOfExpertise, Book
 from django.db import connection
+
+from django.views.generic import ListView
+from django.db.models import Q
 
 def index(request):
     return HttpResponse("Hello, my friend.  You're at the library index. Let's try this ugly composition of shit!")
@@ -82,3 +85,41 @@ def update_book_in_stock(book):
 	a = cursor.fetchone()
 	book.book_in_stock_count = a[0] #a is tuple
 	book.save()
+
+'''
+def search_area_form(request):
+    return render_to_response('search_area_form.html')
+'''	
+def search(request):
+    if 'q' in request.GET:
+        #message = 'You searched for: %r' % request.GET['q']
+        q = request.GET['q']
+        areas = AreaOfExpertise.objects.filter(area_name__icontains=q)
+        return render_to_response('search_results.html', {
+		    's_areas': areas, 
+		    'query': q,
+		    'areas': AreaOfExpertise.objects.all().order_by("area_name"),
+		})
+    else:
+        #message = 'You submitted an empty form.'
+        #return HttpResponse('Please submit a search term.')
+        return render(request, 'categories.html', {
+			'areas': AreaOfExpertise.objects.all().order_by("area_name"),
+		})
+
+    #return HttpResponse(message)	
+	
+	
+'''
+class AreaSearchForm(ListView):
+    model = AreaOfExpertise
+
+    def get_queryset(self):
+        # Получаем не отфильтрованный кверисет всех моделей
+        queryset = super(ListView, self).get_queryset()
+        q = self.request.GET.get("q")
+        if q:
+        # Если 'q' в GET запросе, фильтруем кверисет по данным из 'q'
+            return queryset.filter(Q(area_name__icontains=q))
+        return queryset
+'''

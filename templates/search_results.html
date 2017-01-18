@@ -1,0 +1,24 @@
+{% extends "categories.html" %}
+
+{% block menu %} {{ block.super }} {% endblock %}
+
+
+{% block content %}
+	<p>Результаты поиска для: <strong>{{ query }}</strong></p>
+
+	{% if s_areas %}
+		<ul>
+			{% for area in s_areas %}
+				<li><a class=text href="/library/category/{{ area.pk }}/">{{ area.area_name }}</a></li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<h3>Категорий по вашему запросу не найдено.</h3>
+	{% endif %}
+
+{% endblock %}
+
+
+
+
+
