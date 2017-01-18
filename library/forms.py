@@ -8,13 +8,14 @@ from django.contrib.auth import authenticate
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100)
-	password = forms.CharField(widget=forms.PasswordInput)
-	def clean_username(self):
-	username = self.cleaned_data['username']
-	if username.strip() == '':
-	    raise forms.ValidationError(
-		u'Username is empty', code='validation_error')
-	return username
+    password = forms.CharField(widget=forms.PasswordInput)
+	
+	
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if username.strip() == '':
+            raise forms.ValidationError(u'Username is empty', code='validation_error')
+        return username
 
     def clean_password(self):
         password = self.cleaned_data['password']
