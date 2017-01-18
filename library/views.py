@@ -86,10 +86,7 @@ def update_book_in_stock(book):
 	book.book_in_stock_count = a[0] #a is tuple
 	book.save()
 
-'''
-def search_area_form(request):
-    return render_to_response('search_area_form.html')
-'''	
+
 def search(request):
     if 'q' in request.GET:
         #message = 'You searched for: %r' % request.GET['q']
@@ -110,16 +107,4 @@ def search(request):
     #return HttpResponse(message)	
 	
 	
-'''
-class AreaSearchForm(ListView):
-    model = AreaOfExpertise
 
-    def get_queryset(self):
-        # Получаем не отфильтрованный кверисет всех моделей
-        queryset = super(ListView, self).get_queryset()
-        q = self.request.GET.get("q")
-        if q:
-        # Если 'q' в GET запросе, фильтруем кверисет по данным из 'q'
-            return queryset.filter(Q(area_name__icontains=q))
-        return queryset
-'''
