@@ -1,0 +1,26 @@
+{% extends "librarian_s-page.html" %}
+
+{% block menu %}
+	{{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+	<h3>Все читатели:</h3>
+	<table>
+		<tr>
+			<th>ФИ</th>
+			<th>Телефон</th>
+			<th>Адрес</th>
+		</tr>
+		{% for reader in readers %}
+			<tr>
+				<td><a href="/library/s/reader/{{ reader.pk }}/">{{ reader.surname }} {{ reader.name }}</a></td>
+				<td>{{ reader.phone }}</td>
+				<td>{{ read.address }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+		
+{% endblock %}
+

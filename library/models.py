@@ -26,6 +26,7 @@ class Book (models.Model):
     publisher = models.CharField(max_length=64)
     pages_count = models.IntegerField(blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
+    price = models.IntegerField(blank=True, null=True)
     areas = models.ManyToManyField(AreaOfExpertise, db_table="library_mm_bookhasarea", related_name="books")
     book_count = models.IntegerField(blank=True, null=True) #Кол-во книг
     book_in_stock_count = models.IntegerField(blank=True, null=True) #Книги в наличии на полках
@@ -59,8 +60,8 @@ class ReaderBookCard (models.Model):
     bookcopy_number = models.ForeignKey(BookCopy, related_name="bookcopyincard", on_delete=models.CASCADE) #нужно ли related_name?
     taken_date = models.DateField(auto_now_add=True, blank=False)
     return_date = models.DateField(blank=True, null=True, default=None) 
-    employee_give = models.ForeignKey(User, related_name="books_given", blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    employee_take = models.ForeignKey(User, related_name="books_taken", blank=True, null=True, default=None, on_delete=models.SET_NULL) #как-то прописать сотрудника
+    employee_give = models.ForeignKey(User, related_name="books_given", blank=True, null=True, default=None, on_delete=models.SET_DEFAULT)
+    employee_take = models.ForeignKey(User, related_name="books_taken", blank=True, null=True, default=None, on_delete=models.SET_DEFAULT) #как-то прописать сотрудника
 
     def __str__(self):
         #return "\№ %s, given on %s by %s. Returned on %s to %s" % (str(self.bookcopy_number.pk), str(self.taken_date), str(self.employee_give.username), str(self.return_date), str(self.employee_take.username))
@@ -71,7 +72,7 @@ class Reader (models.Model):
     surname = models.CharField(max_length=64)
     name = models.CharField(max_length=64)
     address = models.CharField(max_length=255)
-    reader_books = models.ManyToManyField(ReaderBookCard, db_table="library_mm_readerhasbook", related_name="readers", blank=True, null=True) 
+    reader_books = models.ManyToManyField(ReaderBookCard, db_table="library_mm_readerhasbook", related_name="readers") 
     phone = models.CharField(max_length=32, default="-")
 
     def __str__(self):

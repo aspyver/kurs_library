@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from library.models import AreaOfExpertise, Book
+from library.models import AreaOfExpertise, Book, Reader
 from django.db import connection
 from library.forms import LoginForm
 from django.contrib.auth import login, logout
@@ -13,6 +13,7 @@ def index(request):
     return HttpResponse("Hello, my friend.  You're at the library index. Let's try this ugly composition of shit!")
 
 
+#Стартовая страница. Отображения списка областей знаний в меню
 def areas_of_expertises(request):
 	areas = AreaOfExpertise.objects.all().order_by("area_name")
 	'''
@@ -26,6 +27,7 @@ def areas_of_expertises(request):
 	})
 
 
+#Отображение книг по заданной области знаний
 def area_of_expertise(request, area_id):
 	if area_id == None:
 		ar = AreaOfExpertise.objects.first()
@@ -50,7 +52,9 @@ def area_of_expertise(request, area_id):
 		'area': ar,
 		'books': books,
 	})
-
+	
+	
+#Отображение информации для заданной книги
 def book(request, book_id):
 	if book_id == None:
 		book = Book.objects.first()
@@ -69,7 +73,7 @@ def book(request, book_id):
 
 	
 	
-	
+#Высчитывание кол-ва экземпляров книги в библиотеке (PostgreSQL)	
 def update_book_in_stock(book):
 	book_id = book.id
 	cursor = connection.cursor()
@@ -93,6 +97,9 @@ def update_book_in_stock(book):
 def search_area_form(request):
     return render_to_response('search_area_form.html')
 '''	
+
+
+#Осуществление поиска по областям знаний
 def search(request):
     if 'q' in request.GET:
         #message = 'You searched for: %r' % request.GET['q']
@@ -111,7 +118,8 @@ def search(request):
 		})
     #return HttpResponse(message)
     
-    	
+    
+#Вход в систему для работников    	
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -119,13 +127,52 @@ def user_login(request):
             user = form.save()
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect('/library/')
+                return HttpResponseRedirect('/library/staff/')
     form = LoginForm()
     return render(request, 'login.html', {
         'form': form,
         'areas': AreaOfExpertise.objects.all().order_by("area_name"),
     })		
+
+
+def user_logout(request):
+	logout(request)
+	return HttpResponseRedirect('/library/')
 	
+	
+def staff(request):
+	if request.user.is_authenticated():
+		return render(request, 'staff_s-page.html' )
+	else:
+		return HttpResponseRedirect('/library/')
+		
+		
+def librarian(request):
+	if request.user.is_authenticated():
+		#проверка, что это сотрудник абнонемента или чительного зала
+		return render(request, 'librarian_s-page.html' )
+	else:
+		return HttpResponseRedirect('/library/')
+		
+		
+def readers_list(request):
+	if request.user.is_authenticated():
+		
+		return render(request, 'readers.html', {
+		    'readers': Reader.objects.all().order_by("surname", "name"),
+		})
+	else:
+		return HttpResponseRedirect('/library/')
+		
+def reader(request):
+	if request.user.is_authenticated():
+		
+		return render(request, 'reader.html', {
+		    'reader': Reader.objects.all().order_by("surname", "name"),
+		})
+	else:
+		return HttpResponseRedirect('/library/')		
+		
 '''
 class AreaSearchForm(ListView):
     model = AreaOfExpertise

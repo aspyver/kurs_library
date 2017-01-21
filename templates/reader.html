@@ -1,0 +1,27 @@
+{% extends "librarian_s-page.html" %}
+
+{% block menu %}
+	{{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+	<h3>Информация о читателе {{ reader.surname }} {{ reader.name}}:</h3>
+	<table>
+		<tr>
+			<th>Фамилия</th>
+			<td>{{ reader.surname }}</td>
+		</tr>
+		<tr>
+			<th>Имя</th>
+			<td>"{{ reader.name }}"</td>
+		</tr>
+		<tr>
+			<th>Уникальный номер читателя</th>
+			<td>"{{ reader.pk }}"</td>
+		</tr>
+
+	</table>
+		
+{% endblock %}
+
