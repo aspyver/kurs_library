@@ -1,0 +1,43 @@
+{% extends "manager_s-page.html" %}
+
+{% block menu %}
+	{{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+	<h3>Добавить книгу:</h3>
+	<form action="/library/s/statistics/" method="get">
+		<input type="text" required placeholder="ISBN (напр.978-5-55-55-4)" name="isbn"><br>
+		
+		<input type="text" required placeholder="Название книги" name="book_name"><br>
+		<p>Авторы: </p>
+		<select multiple="multiple" name="authors" >
+			{% for author in authors %}
+				<option value="{{ author.pk }}">{{ author.author_name }}</option>
+			{% endfor %}
+		</select><br><br>
+    
+        
+        <input type="text" required placeholder="Город" name="book_city"><br>
+		<input type="text" required placeholder="Издательство" name="publisher"><br>
+		<input type="text" required pattern="^[0-9]+$" placeholder="Количество страниц" name="pages_count"><br>
+		<input type="text" required pattern="^[0-9]+$" placeholder="Цена" name="price"><br>
+		
+		<p>Предметные области: </p>
+		<select multiple="multiple" name="areas" required>
+			{% for area in areas %}
+				<option value="{{ area.pk }}">{{ area.area_name }}</option>
+			{% endfor %}
+		</select><br><br>
+		
+		
+		<input type="text" required pattern="^[0-9]+$" placeholder="Количество экземпляров" name="book_count"><br><br>
+
+	
+		<input type="submit" value="Добавить книгу">
+	</form>
+	
+		
+{% endblock %}
+

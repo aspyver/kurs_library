@@ -17,6 +17,8 @@ class Author (models.Model):
     def __str__(self):
         return self.author_name
 
+class LastStat (models.Model):
+	taken_count = models.IntegerField(blank=True, null=True)
 
 class Book (models.Model):
     isbn = models.CharField(max_length=32, unique=True)
@@ -26,10 +28,10 @@ class Book (models.Model):
     publisher = models.CharField(max_length=64)
     pages_count = models.IntegerField(blank=True, null=True)
     price = models.IntegerField(blank=True, null=True)
-    price = models.IntegerField(blank=True, null=True)
     areas = models.ManyToManyField(AreaOfExpertise, db_table="library_mm_bookhasarea", related_name="books")
     book_count = models.IntegerField(blank=True, null=True) #Кол-во книг
     book_in_stock_count = models.IntegerField(blank=True, null=True) #Книги в наличии на полках
+    last_stat = models.ForeignKey(LastStat, blank=True, null=True, default=None, on_delete=models.SET_DEFAULT)
 
     def __str__(self):
         return "%s -- %s -- %s" % (self.book_name, self.isbn, self.publisher)
@@ -45,7 +47,6 @@ def validate_isbn(value):
     if not match(r"(\d*-\d*-\d*-\d*-\d*)|(\d*-\d*-\d*-\d*)", value):
         raise ValidationError(u'isbn is not correct')
 """
-
 
 class BookCopy (models.Model):
     book_info = models.ForeignKey(Book, on_delete=models.PROTECT, related_name="bookcopies")
@@ -72,7 +73,7 @@ class Reader (models.Model):
     surname = models.CharField(max_length=64)
     name = models.CharField(max_length=64)
     address = models.CharField(max_length=255)
-    reader_books = models.ManyToManyField(ReaderBookCard, db_table="library_mm_readerhasbook", related_name="readers") 
+    reader_books = models.ManyToManyField(ReaderBookCard, blank=True, null=True, db_table="library_mm_readerhasbook", related_name="readers") 
     phone = models.CharField(max_length=32, default="-")
 
     def __str__(self):

@@ -14,16 +14,18 @@ urlpatterns = [
     
     url(r'^logout/.*$', views.user_logout, name='new'),
     url(r'^staff/$', views.staff, name='staff_start-page'),
-    url(r'^s/lib/$', views.librarian, name='librarian_start-page'),
-    url(r'^s/man/$', views.staff, name='manager_start-page'),
     
+    url(r'^s/lib/$', views.librarian, name='librarian_start-page'),
     url(r'^s/readers/$', views.readers_list, name = "readers"),
     url(r'^s/reader/((?P<reader_id>\d+)/)?$', views.reader, name = "reader"),
     url(r'^s/return/$', views.return_book, name = "return_book"),
     url(r'^s/get/$', views.get_book, name = "get_book"),
-    #url(r'^s/bad_readers/$', views.bad_readers_list, name = "bad_readers_list"),
+    url(r'^s/bad_readers/$', views.bad_readers_list, name = "bad_readers_list"),
+    url(r'^s/statistics/$', views.statistics, name = "statistics"),
     
-    
+    url(r'^s/man/$', views.manager, name='manager_start-page'),
+    url(r'^s/add-books/$', views.add_books, name='add_books'),
+    #url(r'^s/add-bookcopies/$', views.add_bookcopies, name='add_books'),
     
     
     

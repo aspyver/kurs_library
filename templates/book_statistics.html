@@ -1,0 +1,40 @@
+{% extends "librarian_s-page.html" %}
+
+{% block menu %}
+	{{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+	<h2>Статистика по книгам</h2>
+	<h3>Выберете интересующий период:</h3>
+	
+	<form action="/library/s/statistics/" method="get">
+		<input type="text" pattern="[0-3][0-9]-[0-1][0-9]-[0-9]{4}" placeholder="c (dd-mm-yyyy)" name="date_start">
+		<input type="text" placeholder="по (dd-mm-yyyy)" name="date_end">
+		<input type="hidden" name="reader_id" value="{{ reader.pk }}">
+		<input type="submit" value="Вывести статистику">
+	</form>
+	
+	
+	
+	<h3>Статистика по книгам за период c {{ date_start|date:"d M Y" }} по {{ date_end|date:"d M Y" }}:</h3>
+	<table>
+		<tr>
+			<th>Номер</th>
+			<th>Название</th>
+			<th>ISBN</th>
+			<th>Взяты за период (кол-во раз)</th>
+		</tr>
+		{% for book in books %}
+			<tr>
+				<td>{{ book.pk }}</td>
+				<td><a href="/library/book/{{ book.pk }}/">{{ book.book_name }}</a></td>
+				<td>{{ book.isbn }}</td>
+				<td>{{ book.last_stat.taken_count }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+		
+{% endblock %}
+

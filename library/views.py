@@ -1,10 +1,10 @@
 from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
-from library.models import AreaOfExpertise, Book, Reader, ReaderBookCard, BookCopy
+from library.models import AreaOfExpertise, Book, Reader, ReaderBookCard, BookCopy, LastStat, Author
 from django.db import connection, models
 from library.forms import LoginForm
 from django.contrib.auth import login, logout
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 
@@ -244,9 +244,79 @@ def get_book(request):
 		return HttpResponseRedirect('/library/')		
 
 
+def bad_readers_list(request):
+	if request.user.is_authenticated():
+		some_day_ago = timezone.now()-timedelta(days=14)
+		readers = Reader.objects.filter(reader_books__taken_date__lte=some_day_ago).order_by("surname", "name")
+		'''
+		s = "Книги: <br><br>"
+		for reader in readers:
+			s = s + "(" + str(reader.pk) +  ") "+"<br>"
+		return HttpResponse(s)
+		'''
+		return render(request, 'bad_readers.html', {
+		    'readers': readers,
+		})
+		
+		
+	else:
+		return HttpResponseRedirect('/library/')
 
 
+def statistics(request):
+	if request.user.is_authenticated():
+		if 'date_start' in request.GET:
+			date_start = datetime.strptime(str(request.GET['date_start']), '%d-%M-%Y')
+			if 'date_end' in request.GET:
+				date_end = request.GET['date_end']
+				if date_end != '':
+					date_end = datetime.strptime(str(date_end), '%d-%M-%Y')
+				else:
+					date_end = timezone.now()
+			else:
+					date_end = timezone.now()
+		else:
+			date_start = timezone.now()-timedelta(days=30)
+			date_end = timezone.now()
+			
+		books = Book.objects.all()
+		for book in books:
+			taken_count=Book.objects.filter(pk=book.pk, bookcopies__bookcopyincard__taken_date__gte=date_start, bookcopies__bookcopyincard__taken_date__lte=date_end).count()
+			bookstat = LastStat(taken_count=taken_count)
+			bookstat.save()
+			book.last_stat = bookstat
+			book.save()
+		return render(request, 'book_statistics.html', {
+		    'books': Book.objects.all().order_by("last_stat").reverse(),
+		    'date_start' : date_start,
+		    'date_end' : date_end,
+		})
+		
+		
+	else:
+		return HttpResponseRedirect('/library/')
 
+
+def manager(request):
+	if request.user.is_authenticated:
+		return render(request, 'manager_s-page.html' )
+	else:
+		return HttpResponseRedirect('/library/')		
+		
+def add_books(request):
+	if request.user.is_authenticated:
+		
+		
+		
+		
+		
+		return render(request, 'to_add_books.html', {
+			'authors' : Author.objects.all().order_by("author_name"),
+			'areas' : AreaOfExpertise.objects.all().order_by("area_name"),
+		})
+	else:
+		return HttpResponseRedirect('/library/')		
+		
 		
 '''
 class AreaSearchForm(ListView):
