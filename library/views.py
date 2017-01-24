@@ -391,7 +391,45 @@ def add_bookcopies(request):
 
 	else:
 		return HttpResponseRedirect('/library/')			
+
+
+def del_book_list(request):
+	if request.user.is_authenticated:
+		return render(request, 'to_delete_book-list.html', {
+			'books' : Book.objects.all().order_by("pk"),
+		})
+
+
+	else:
+		return HttpResponseRedirect('/library/')
 		
+		
+		
+def del_bookcopies_list(request, book_id):
+	if request.user.is_authenticated:
+		if book_id != None:
+			try:
+				book = Book.objects.get(pk=book_id)
+			except Book.DoesNotExist:
+				raise Http404
+				
+		if ('bookcopy_id' in request.GET):
+			bookcopy_id = int(request.GET['bookcopy_id'])
+			try:
+				bookcopy = BookCopy.objects.get(pk=bookcopy_id)
+			except BookCopy.DoesNotExist:
+				raise Http404
+
+			bookcopy.delete()
+			book.book_count -= 1
+			book.save()
+		return render_to_response('to_delete_bookcopies-list.html', {
+			'book' : book,
+			'bookcopies' : BookCopy.objects.filter(book_info=book.pk),
+		})		
+
+	else:
+		return HttpResponseRedirect('/library/')				
 '''
 class AreaSearchForm(ListView):
     model = AreaOfExpertise

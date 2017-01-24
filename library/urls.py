@@ -25,8 +25,9 @@ urlpatterns = [
     
     url(r'^s/man/$', views.manager, name='manager_start-page'),
     url(r'^s/add-books/$', views.add_books, name='add_books'),
-    url(r'^s/add-bookcopies/$', views.add_bookcopies, name='add_books'),
-    
+    url(r'^s/add-bookcopies/$', views.add_bookcopies, name='add_bookcopies'),
+    url(r'^s/del-book/$', views.del_book_list, name='del_book-list'),
+    url(r'^s/del-book/copies/((?P<book_id>\d+)/)?$', views.del_bookcopies_list, name='del_bookcopies'),
     
     
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,41 @@
+{% extends "manager_s-page.html" %}
+
+{% block menu %}
+	{{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+	<h3>Удалить экземпляры книги {{ book.book_name }}, ISBN {{ book.isbn }}:</h3>
+	
+	
+	<table>
+		<tr>
+			<th>Номер экземпляра</th>
+			<th>Стеллаж</th>
+			<th>Полка</th>
+			<th>Удалить экземпляры</th>
+
+		</tr>
+		{% for bookcopy in bookcopies %}
+			<tr>
+				<td>{{ bookcopy.pk }}</td>
+				<td>{{ bookcopy.rack_number }} </td>
+				<td>{{ bookcopy.shelf_number }} </td>
+				<td>
+			
+					<form action="/library/s/del-book/copies/{{ book.pk }}" method="get">
+						<input type="hidden" name="bookcopy_id" value="{{ bookcopy.pk }}">	
+						<input type="submit" value="Удалить">
+					</form>
+					
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+
+	
+		
+{% endblock %}
+
