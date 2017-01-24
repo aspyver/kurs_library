@@ -53,7 +53,7 @@ class BookCopy (models.Model):
     rack_number = models.IntegerField()
     
     def __str__(self):
-        return "\"%s\" on shelf %s, on rack %s" % (self.book_info.book_name, self.shelf_number, self.rack_number)
+        return "№%s \"%s\" on shelf %s, on rack %s" % (self.pk, self.book_info.book_name, self.shelf_number, self.rack_number)
     
 
 class ReaderBookCard (models.Model):

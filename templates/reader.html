@@ -6,7 +6,7 @@
 
 
 {% block content %}
-	<h3>Информация о читателе {{ reader.surname }} {{ reader.name}}:</h3>
+	<h2>Информация о читателе {{ reader.surname }} {{ reader.name}}:</h2>
 	<table>
 		<tr>
 			<th>Фамилия</th>
@@ -14,14 +14,53 @@
 		</tr>
 		<tr>
 			<th>Имя</th>
-			<td>"{{ reader.name }}"</td>
+			<td>{{ reader.name }}</td>
 		</tr>
 		<tr>
-			<th>Уникальный номер читателя</th>
-			<td>"{{ reader.pk }}"</td>
+			<th>№ карточки</th>
+			<td>{{ reader.pk }}</td>
 		</tr>
 
 	</table>
-		
+	<h3>Книги на руках читателя:</h3>	
+	
+	<table>
+		<tr>
+			<th>Номер записи</th>
+			<th>Книга</th>
+			<th>Выдана</th>
+			<th>Возвращена</th>
+			<th>Сдать</th>
+
+		</tr>
+		{% for bookcard in bookcards %}
+			<tr>
+				<td>{{ bookcard.pk }} </td>
+				<td><a href="/library/books/{{ bookcard.bookcopy_number.book_info.pk }}/"> {{ bookcard.bookcopy_number}}</a></td>
+				<td>{{ bookcard.taken_date|date:"d M Y"}} </td>
+
+				<td>{% if bookcard.return_date %}{{ bookcard.return_date|date:"d M Y" }}{% endif %}</td>
+				<td>
+					{% if not bookcard.return_date %}
+						<form action="/library/s/return/" method="get">
+							<input type="hidden" name="bookcard_id" value="{{ bookcard.pk }}">
+							<input type="hidden" name="reader_id" value="{{ reader.pk }}">
+							<input type="submit" value="Сдать книгу">
+						</form>
+					{% endif%}
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+	
+	<h3>Выдать книгу:</h3>	
+	
+	<form action="/library/s/get/" method="get">
+		<input type="text" placeholder="Введите номер экземпляра книги" name="bookcopy_id">
+		<input type="hidden" name="reader_id" value="{{ reader.pk }}">
+		<input type="submit" value="Выдать книгу">
+	</form>
+	
+	
 {% endblock %}
 

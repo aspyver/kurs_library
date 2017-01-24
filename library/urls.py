@@ -18,7 +18,13 @@ urlpatterns = [
     url(r'^s/man/$', views.staff, name='manager_start-page'),
     
     url(r'^s/readers/$', views.readers_list, name = "readers"),
-    #url(r'^s/reader/((?P<reader_id>\d+)/)?$', views.reader, name = "reader"),
+    url(r'^s/reader/((?P<reader_id>\d+)/)?$', views.reader, name = "reader"),
+    url(r'^s/return/$', views.return_book, name = "return_book"),
+    url(r'^s/get/$', views.get_book, name = "get_book"),
+    #url(r'^s/bad_readers/$', views.bad_readers_list, name = "bad_readers_list"),
+    
+    
+    
     
     
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

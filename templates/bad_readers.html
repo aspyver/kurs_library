@@ -1,0 +1,24 @@
+{% extends "librarian_s-page.html" %}
+
+{% block menu %}
+	{{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+	<h3>Читатели, не вернувшие книги в течение двух недель:</h3>
+	<table>
+		<tr>
+			<th>ФИ</th>
+			<th>Телефон</th>
+		</tr>
+		{% for reader in readers %}
+			<tr>
+				<td><a href="/library/s/reader/{{ reader.pk }}/">{{ reader.surname }} {{ reader.name }}</a></td>
+				<td>{{ reader.phone }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+		
+{% endblock %}
+

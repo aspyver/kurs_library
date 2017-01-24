@@ -1,9 +1,12 @@
 from django.shortcuts import render, render_to_response, redirect
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from library.models import AreaOfExpertise, Book, Reader
-from django.db import connection
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseForbidden
+from library.models import AreaOfExpertise, Book, Reader, ReaderBookCard, BookCopy
+from django.db import connection, models
 from library.forms import LoginForm
 from django.contrib.auth import login, logout
+from datetime import date, timedelta
+from django.utils import timezone
+from django.core.exceptions import PermissionDenied
 
 '''
 from django.views.generic import ListView
@@ -164,14 +167,86 @@ def readers_list(request):
 	else:
 		return HttpResponseRedirect('/library/')
 		
-def reader(request):
+def reader(request, reader_id):
 	if request.user.is_authenticated():
-		
+		if reader_id == None:
+			reader = Reader.objects.first()
+		else:
+			try:
+				reader = Reader.objects.get(pk=reader_id)
+			except Book.DoesNotExist:
+				raise Http404
+
+		#cbooks=ReaderBookCard.objects.filter(readers=reader_id, return_date=None)
+		bookcards=ReaderBookCard.objects.filter(readers=reader_id).order_by("taken_date")
+		'''
+		s = "Книги: <br><br>"
+		for bookcard in bookcards:
+			s = s + "(" + str(bookcard.pk) + str(bookcard.taken_date)+ ") "+"<br>"
+		return HttpResponse(s)
+		'''
 		return render(request, 'reader.html', {
-		    'reader': Reader.objects.all().order_by("surname", "name"),
+		    'reader': reader,
+		    'bookcards': bookcards,
 		})
+		
+		
 	else:
 		return HttpResponseRedirect('/library/')		
+		
+		
+def return_book(request):
+	if request.user.is_authenticated():
+		if 'bookcard_id' in request.GET:
+			bookcard_id = request.GET['bookcard_id']
+			book = ReaderBookCard.objects.get(pk=bookcard_id)
+			#book.return_date = date.now()
+			book.return_date = timezone.now()
+			book.save()		
+		if 'reader_id' in request.GET:
+			reader_id = request.GET['reader_id']
+		else:
+			reader_id = 1
+		return HttpResponseRedirect('/library/s/reader/' + str(reader_id) + '/')
+		
+	else:
+		return HttpResponseRedirect('/library/')			
+		
+		
+def get_book(request):
+	if request.user.is_authenticated():
+		if 'bookcopy_id' in request.GET:
+			bookcopy_id = request.GET['bookcopy_id']
+			try: #does bookcopy exist
+				bookcopy = BookCopy.objects.get(pk=bookcopy_id)
+			except BookCopy.DoesNotExist:
+				raise Http404
+			#does bookcopy in library
+			if ReaderBookCard.objects.filter(bookcopy_number=bookcopy_id, return_date=None):
+				return HttpResponse('Книга уже кому-то выдана')
+			else:
+				bookcard = ReaderBookCard(bookcopy_number=bookcopy, taken_date=timezone.now(), employee_give=request.user)
+				if 'reader_id' in request.GET:
+					reader_id = request.GET['reader_id']
+					try: #does reader exist
+						reader = Reader.objects.get(pk=reader_id)
+					except Reader.DoesNotExist:
+						raise Http404
+					bookcard.save()	
+					reader.reader_books.add(bookcard)
+				else:
+					return HttpResponse('No reader')
+				return HttpResponseRedirect('/library/s/reader/' + str(reader_id) + '/')
+		else:
+			return HttpResponseRedirect('/library/s/readers')
+		
+	else:
+		return HttpResponseRedirect('/library/')		
+
+
+
+
+
 		
 '''
 class AreaSearchForm(ListView):
