@@ -1,0 +1,46 @@
+{% extends "manager_s-page.html" %}
+
+{% block menu %}
+	{{ block.super }}
+{% endblock %}
+
+
+{% block content %}
+	<h3>Добавить экземпляры книг:</h3>
+	
+	
+	<table>
+		<tr>
+			<th>Название книги</th>
+			<th>ISBN</th>
+			<th>Количество книг</th>
+
+			<th>Добавить экземпляры</th>
+
+		</tr>
+		{% for book in books %}
+			<tr>
+				<td><a href="/library/books/{{ book.pk }}/"> "{{ book.book_name }}"</a></td>
+				<td>{{ book.isbn }} </td>
+				<td>{% if book.book_count %} {{ book.book_count }} {% else %} 0 {% endif %}</td>
+				<td>
+			
+					<form action="/library/s/add-bookcopies/" method="get">
+						<input type="text" pattern="^[0-9]+$" required placeholder="Полка" name="bc_shelf"><br>
+						<input type="text" pattern="^[0-9]+$" required placeholder="Стеллаж" name="bc_rack"><br>
+						<input type="text" pattern="^[0-9]+$" placeholder="Количество" name="bc_count"><br>
+						<input type="hidden" name="book_id" value="{{ book.pk }}">
+	
+						<input type="submit" value="Добавить экземпляры">
+					</form>
+					
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+
+
+	
+		
+{% endblock %}
+

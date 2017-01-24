@@ -7,7 +7,7 @@
 
 {% block content %}
 	<h3>Добавить книгу:</h3>
-	<form action="/library/s/statistics/" method="get">
+	<form action="/library/s/add-books/" method="get">
 		<input type="text" required placeholder="ISBN (напр.978-5-55-55-4)" name="isbn"><br>
 		
 		<input type="text" required placeholder="Название книги" name="book_name"><br>
@@ -30,10 +30,6 @@
 				<option value="{{ area.pk }}">{{ area.area_name }}</option>
 			{% endfor %}
 		</select><br><br>
-		
-		
-		<input type="text" required pattern="^[0-9]+$" placeholder="Количество экземпляров" name="book_count"><br><br>
-
 	
 		<input type="submit" value="Добавить книгу">
 	</form>

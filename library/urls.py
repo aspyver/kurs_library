@@ -25,7 +25,7 @@ urlpatterns = [
     
     url(r'^s/man/$', views.manager, name='manager_start-page'),
     url(r'^s/add-books/$', views.add_books, name='add_books'),
-    #url(r'^s/add-bookcopies/$', views.add_bookcopies, name='add_books'),
+    url(r'^s/add-bookcopies/$', views.add_bookcopies, name='add_books'),
     
     
     

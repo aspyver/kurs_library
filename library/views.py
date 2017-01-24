@@ -305,18 +305,92 @@ def manager(request):
 		
 def add_books(request):
 	if request.user.is_authenticated:
-		
-		
-		
-		
+		if ('isbn' in request.GET) and ('book_name' in request.GET) and ('book_city' in request.GET) and ('publisher' in request.GET) and ('book_city' in request.GET) and ('pages_count' in request.GET) and ('price' in request.GET) and ('authors' in request.GET) and ('areas' in request.GET):
+			isbn = request.GET['isbn']
+			book_city = request.GET['book_city']
+			publisher = request.GET['publisher']
+			book_city = request.GET['book_city']
+			pages_count = request.GET['pages_count']
+			price = request.GET['price']
+			authors = request.GET.getlist('authors')
+			areas = request.GET.getlist('areas')
+			book_name = request.GET['book_name']
+			
+			book = Book()
+			book.isbn = isbn
+			book.book_name = book_name
+			book.publisher = publisher
+			book.book_city = book_city
+			book.price = price
+			book.pages_count = pages_count
+			book.save()
+			
+			
+			for author in authors:
+				try:
+					auth = Author.objects.get(pk=int(author))
+				except Author.DoesNotExist:
+					raise Http404 
+				book.authors.add(auth)
+				
+			for area in areas:
+				try:
+					ar = AreaOfExpertise.objects.get(pk=int(area))
+				except AreaOfExpertise.DoesNotExist:
+					raise Http404 
+				book.areas.add(ar)
+			
+			book.save()
 		
 		return render(request, 'to_add_books.html', {
 			'authors' : Author.objects.all().order_by("author_name"),
 			'areas' : AreaOfExpertise.objects.all().order_by("area_name"),
 		})
+		'''
+		else:
+			return HttpResponse('Smth wrong')
+		'''
+
 	else:
 		return HttpResponseRedirect('/library/')		
-		
+
+
+
+def add_bookcopies(request):
+	if request.user.is_authenticated:
+		if ('bc_count' in request.GET):
+			if request.GET['bc_count'] != '':
+				bc_count = int(request.GET['bc_count'])
+			else:
+				bc_count = 1
+				
+		if ('bc_shelf' in request.GET) and ('book_id' in request.GET) and ('bc_rack' in request.GET) :
+			bc_shelf = request.GET['bc_shelf']
+			bc_rack = request.GET['bc_rack']
+			book_id = request.GET['book_id']
+			
+			try:
+				book = Book.objects.get(pk=int(book_id))
+			except Book.DoesNotExist:
+				raise Http404 
+			if book.book_count: 
+				book.book_count = int(book.book_count) + int(bc_count)
+			else:
+				book.book_count = int(bc_count)
+			book.save()
+			for i in range(bc_count):
+				bookcopy = BookCopy(book_info = book, shelf_number=bc_shelf, rack_number=bc_rack)
+				bookcopy.save()
+
+				
+	
+		return render(request, 'to_add_bookcopies.html', {
+			'books' : Book.objects.all().order_by("book_name"),
+		})
+
+
+	else:
+		return HttpResponseRedirect('/library/')			
 		
 '''
 class AreaSearchForm(ListView):
