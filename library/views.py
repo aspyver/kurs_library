@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout
 from datetime import date, timedelta, datetime
 from django.utils import timezone
 from django.core.exceptions import PermissionDenied
+from django.db.models import Max
 
 '''
 from django.views.generic import ListView
@@ -78,6 +79,7 @@ def book(request, book_id):
 	
 #Высчитывание кол-ва экземпляров книги в библиотеке (PostgreSQL)	
 def update_book_in_stock(book):
+	'''
 	book_id = book.id
 	cursor = connection.cursor()
 	#count = Book.objects.raw
@@ -94,8 +96,26 @@ def update_book_in_stock(book):
                             and book.id = %s);""", [book_id])
 	a = cursor.fetchone()
 	book.book_in_stock_count = a[0] #a is tuple
+	
+	'''
+	
+	'''
+	maax = ReaderBookCard.objects.filter(bookcopy_number__book_info__pk=book.pk).aggregate(Max('taken_date'))
+	maax = maax['taken_date__max'] 
+	
+	count = Book.objects.filter(pk=book.id)
+	count= count.exclude(bookcopies__bookcopyincard__taken_date=maax, bookcopies__bookcopyincard__return_date=None)
+	count=count.count()
+	book.book_in_stock_count = count
+	'''
+	readers_books_count = ReaderBookCard.objects.filter(bookcopy_number__book_info__pk=book.pk, return_date = None).count()
+	if book.book_count:
+		book.book_in_stock_count = int(book.book_count) - readers_books_count
+	
 	book.save()
-
+	
+	
+	
 '''
 def search_area_form(request):
     return render_to_response('search_area_form.html')
